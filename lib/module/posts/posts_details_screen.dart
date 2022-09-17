@@ -21,7 +21,7 @@ class PostDetailsScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            body: cubit.postsModel == null
+            body: cubit.postsDetailsModel== null
                 ? const Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(
                     child: Column(
