@@ -1,36 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:konax_task/core/network/remote/dio_helper.dart';
-import 'package:konax_task/module/cubit/cubit.dart';
-import 'package:konax_task/module/cubit/states.dart';
-import 'package:konax_task/module/posts/posts_screen.dart';
+import 'package:konax_task/core/network/remote/http_helper.dart';
+import 'package:konax_task/presentation/cubit/cubit.dart';
+import 'package:konax_task/presentation/posts/posts_screen.dart';
+import 'package:konax_task/repositories/repositories.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  DioHelper.init();
 
-  runApp(const MyApp());
+  runApp(MyApp(
+    repositories: PostsRepositories(HttpHelper()),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.repositories}) : super(key: key);
+  final PostsRepositories repositories;
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-              create: (context) => PostsCubit()
-                ..getPostListData()
-                ..getPostDetailsData()
-                ..getPostComments())
-        ],
-        child: BlocConsumer<PostsCubit, PostsStates>(
-            listener: (context, state) {},
-            builder: (context, state) => MaterialApp(
+    return MaterialApp(
+        home: BlocProvider(
+            create: (context) => PostsCubit(repositories),
+            child: MaterialApp(
                 theme: ThemeData(
                   primarySwatch: Colors.blue,
                 ),
-                home: const PostsScreen())));
+                home: PostsScreen())));
   }
 }

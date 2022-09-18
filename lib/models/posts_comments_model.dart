@@ -13,7 +13,7 @@ class PostsCommentsModel {
     required this.body,
   });
 
-  int postId;
+  dynamic postId;
   int id;
   String name;
   String email;
